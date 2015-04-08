@@ -17,7 +17,16 @@ public class GitLabApi {
 	private RepositoryApi repositoryApi;
 	private SessionApi sessoinApi;
 	private UserApi userApi;
-	
+
+	static public GitLabApi create(String url, String username, String password) {
+		try {
+			String token = new SessionApi(new GitLabApi(url, null)).login(username, null, password).getPrivateToken();
+			return new GitLabApi(url, token);
+		} catch (GitLabApiException e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
 
 	/**
 	 * Constructs a GitLabApi instance set up to interact with the GitLab server
